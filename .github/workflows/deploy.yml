@@ -29,7 +29,7 @@ jobs:
             rm -rf ecommerce-aws
 
             # Clone repo terbaru
-            git clone https://github.com/bayuramdhan50/ecommerce-aws.git
+            git clone https://github.com/Jamsur/web-ecommerce.git
             cd ecommerce-aws
 
             # Kill app.py lama
