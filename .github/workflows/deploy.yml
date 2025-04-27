@@ -26,11 +26,11 @@ jobs:
             sudo yum install -y git python3 -y
 
             # Remove repo lama
-            rm -rf ecommerce-aws
+            rm -rf web-ecommerce
 
             # Clone repo terbaru
             git clone https://github.com/Jamsur/web-ecommerce.git
-            cd ecommerce-aws
+            cd web-ecommerce
 
             # Kill app.py lama
             sudo pkill -f app.py || true
