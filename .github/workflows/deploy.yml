@@ -1,0 +1,42 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup SSH 🔐
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.EC2_SSH_KEY }}
+
+      - name: Deploy to EC2 🚀
+        run: |
+          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.EC2_PUBLIC_IP }} << 'EOF'
+            cd /home/ec2-user/
+            sudo yum update -y
+            sudo yum install -y git python3 -y
+
+            # Remove repo lama
+            rm -rf ecommerce-aws
+
+            # Clone repo terbaru
+            git clone https://github.com/bayuramdhan50/ecommerce-aws.git
+            cd ecommerce-aws
+
+            # Kill app.py lama
+            sudo pkill -f app.py || true
+
+            # Jalanin app.py baru di background
+            sudo nohup python3 app.py > output.log 2>&1 &
+          EOF
+            echo "Deployment completed successfully!"
+
